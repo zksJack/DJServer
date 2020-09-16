@@ -34,6 +34,6 @@ app.use((err, req, res, next) => {
     res.send({status:"2",massage:"未知错误"+err})
 })
 //配置项目端口
-app.listen(5000, () => {
+app.listen(4000, () => {
     console.log("DJ项目已启动");
 })
