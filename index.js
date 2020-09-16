@@ -4,25 +4,29 @@ let bodyParser = require("body-parser");    //body-paser解析表单提交的数
 let cors = require("cors");                 //跨域
 let expressJWT = require("express-jwt");    //跨域token鉴权 解析token
 let config = require('./config');            //jwt配置
-
+let path = require("path");
 let app = express();
 // 配置跨域
 app.use(cors());
 // 配置body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+//托管静态资源
+app.use(express.static(path.join(__dirname,"./uploads")));
 // 配置token 验证权限
 //配置express-jet中间件 res.user可以获取 unless过滤路由  
 app.use(expressJWT({secret:config.jwtSecretKey}).unless({path:[/^\/admin\//]})); //unless 过滤不需要验证的路由
 //引入一级路由
 let userController = require("./controller/user/user");
 let adminController = require("./controller/admin/login");
-
+let newsController = require("./controller/news/news");
 app.get("/hello", (req, res) => {  //测试路由
     res.send("欢迎");
 })
-app.use("/user", userController)
-app.use("/admin",adminController)
+app.use("/user", userController);
+app.use("/admin",adminController);
+app.use("/news",newsController);
+
 //错误处理中间件
 app.use((err, req, res, next) => {
     if (err instanceof Joi.ValidationError) {
