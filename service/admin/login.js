@@ -1,5 +1,6 @@
 let db = require('../../dao/mysqlDB');
-
+let jsonwebtoken = require("jsonwebtoken");//根据用户信息生成一个token
+let config = require('../../config');            //jwt配置
 let bcryptjs = require("bcryptjs");
 //获取管理员的信息
 exports.getAdminInfo = (req, res) => {
@@ -12,7 +13,9 @@ exports.getAdminInfo = (req, res) => {
             return res.send({ status: "1", massage: "用户不存在" });
         } else {
             if (bcryptjs.compareSync(req.query.password,result[0].password)) {
-                return res.send({ status: "0", massage: "查询成功", data: result[0] });
+                let user = {username:result[0].username}
+                let tokenStr = jsonwebtoken.sign(user,config.jwtSecretKey,{expiresIn:config.expiresIn});
+                return res.send({ status: "0", massage: "查询成功", token: tokenStr});
             } else {
                 return res.send({ status: "1", massage: "密码错误" });
             }
