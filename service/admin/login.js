@@ -37,7 +37,9 @@ exports.changePassword = (req, res) => {
                 let csqlparams = [newpassword,req.body.username];
                 db.query(csql, csqlparams, function (err, result) {
                     if (err) throw err;
-                    return res.send({ status: "0", massage: "修改密码成功" });
+                    if(result.affectedRows){
+                        return res.send({ status: "0", massage: "修改密码成功" });
+                    }
                 });
             } else {
                 return res.send({ status: "1", massage: "密码错误" });

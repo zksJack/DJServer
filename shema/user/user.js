@@ -1,8 +1,9 @@
-let joi = require("@hapi/joi");
-
-let name = joi.string().required();
+let Joi = require("@hapi/joi");
+let username = Joi.string().max(30).required();
+let disabled = Joi.string()
 exports.user_schema={
-    one:{
-        name
+    body:{
+        username,
+        disabled
     }
 }

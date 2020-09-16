@@ -4,7 +4,7 @@ let bodyParser = require("body-parser");    //body-paser解析表单提交的数
 let cors = require("cors");                 //跨域
 let expressJWT = require("express-jwt");    //跨域token鉴权 解析token
 let config = require('./config');            //jwt配置
-let jsonwebtoken = require("jsonwebtoken");//根据用户信息生成一个token
+
 let app = express();
 // 配置跨域
 app.use(cors());
