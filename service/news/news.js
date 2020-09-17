@@ -17,11 +17,11 @@ exports.getAllNews = (req, res) => {
     let limit = req.body.limit*1||10;
     let m = (page-1)*limit;
     let sql = '';
+    let sqlParams = [m,limit];
     page&&limit?
         sql = "SELECT SQL_CALC_FOUND_ROWS n.*,typeName FROM tb_news_type t LEFT JOIN tb_news n ON n.type = t.newsType_id limit ?,?"
         :
         sql = "SELECT SQL_CALC_FOUND_ROWS n.*,typeName FROM tb_news_type t LEFT JOIN tb_news n ON n.type = t.newsType_id";
-    let sqlParams = [m,limit];
     db.query(sql, sqlParams, function (err, result) {
         if (err) throw err;
         var sql1 = "SELECT FOUND_ROWS() as count"
