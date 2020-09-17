@@ -18,7 +18,7 @@ exports.getAllNews = (req, res) => {
     let m = (page-1)*limit;
     let sql = '';
     let sqlParams = [];
-    if(req.body.type == undefined){
+    if(req.body.type == undefined || req.body.type == null || req.body.type == ''){
         sql = "SELECT SQL_CALC_FOUND_ROWS n.*,typeName FROM tb_news_type t LEFT JOIN tb_news n ON n.type = t.newsType_id limit ?,?"
         sqlParams = [m,limit];
     }else{
