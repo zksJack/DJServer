@@ -11,9 +11,9 @@ exports.getAllUserInfo = (req, res) => {
     let m = (page - 1) * limit;
     let sql = '';
     page && limit ?
-        sql = 'SELECT SQL_CALC_FOUND_ROWS username,id_card,phone,total_score,disabled FROM tb_user limit ?,?'
+        sql = 'SELECT SQL_CALC_FOUND_ROWS id,username,id_card,phone,total_score,disabled FROM tb_user limit ?,?'
         :
-        sql = 'SELECT SQL_CALC_FOUND_ROWS username,id_card,phone,total_score,disabled FROM tb_user'
+        sql = 'SELECT SQL_CALC_FOUND_ROWS id,username,id_card,phone,total_score,disabled FROM tb_user'
     let sqlParams = [m, limit];
     db.query(sql, sqlParams, function (err, result) {
         if (err) throw err;
@@ -24,8 +24,8 @@ exports.getAllUserInfo = (req, res) => {
     });
 }
 exports.getUserInfo = (req, res) => {
-    let sql = "SELECT u.id,username,phone,nation,wx_num,qq_num,age,sex,total_score,education,job_rank,join_party_time,u.disabled,c.branch_name FROM tb_user u ,tb_coordinate c WHERE username = ? and u.branch_id = c.branch_id"
-    let sqlParams = [req.body.username];
+    let sql = "SELECT u.id,username,phone,nation,wx_num,qq_num,age,sex,total_score,education,job_rank,join_party_time,u.disabled,c.branch_name FROM tb_user u ,tb_coordinate c WHERE u.id = ? and u.branch_id = c.branch_id"
+    let sqlParams = [req.body.userID];
     db.query(sql, sqlParams, function (err, result) {
         if (err) throw err;
         res.send({ status: "0", massage: "查询成功", data: result[0] });
@@ -33,8 +33,8 @@ exports.getUserInfo = (req, res) => {
 }
 //禁用或者恢复
 exports.operationState = (req, res) => {
-    let sql = "UPDATE tb_user SET disabled = ? WHERE username =?"
-    let sqlParams = [req.body.disabled, req.body.username]
+    let sql = "UPDATE tb_user SET disabled = ? WHERE id =?"
+    let sqlParams = [req.body.disabled, req.body.userID]
     db.query(sql, sqlParams, function (err, result) {
         if (err) throw err;
         if (result.affectedRows) {
@@ -44,9 +44,9 @@ exports.operationState = (req, res) => {
 }
 //重置密码
 exports.resetPWD = (req, res) => {
-    let sql = "UPDATE tb_user SET password = ? WHERE username =?"
+    let sql = "UPDATE tb_user SET password = ? WHERE id =?"
     let password = bcryptjs.hashSync("123456", 10);
-    let sqlParams = [password, req.body.username]
+    let sqlParams = [password, req.body.userID]
     db.query(sql, sqlParams, function (err, result) {
         if (err) throw err;
         if (result.affectedRows) {
@@ -55,7 +55,7 @@ exports.resetPWD = (req, res) => {
     })
 }
 exports.getUserByName = (req, res) => {
-    let sql = "SELECT username,id_card,phone,total_score,disabled FROM tb_user WHERE username LIKE ?"
+    let sql = "SELECT id,username,id_card,phone,total_score,disabled FROM tb_user WHERE username LIKE ?"
     let str = '%' + req.body.username + '%'
     let sqlParams = [str];
     db.query(sql, sqlParams, function (err, result) {
