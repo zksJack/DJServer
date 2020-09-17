@@ -12,9 +12,9 @@ exports.getAllNewsTypes = (req, res) => {
 }
 //得到所有新闻 <分页>
 exports.getAllNews = (req, res) => {
-    let page =  req.body.page||1;
+    let page =  req.body.page*1||1;
     (page <= 0) && (page = 1);
-    let limit = req.body.limit*1;
+    let limit = req.body.limit*1||10;
     let m = (page-1)*limit;
     let sql = '';
     page&&limit?
@@ -94,6 +94,7 @@ exports.insertNews = (req, res) => {
         result.affectedRows && res.send({ status: "0", massage: "插入成功" });
     })
 }
+
 // exports.all =(req,res)=>{
 //     let sql = "UPDATE tb_user SET disabled = ? WHERE username =?"
 //     let sqlParams =[]
