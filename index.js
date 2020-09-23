@@ -20,22 +20,30 @@ app.use(expressJWT({secret:config.jwtSecretKey}).unless({path:[/^\/admin\//]}));
 let userController = require("./controller/user/user");
 let adminController = require("./controller/admin/login");
 let newsController = require("./controller/news/news");
+let carouselController = require("./controller/carousel/carousel");
+let commentController = require("./controller/comment/comment");
+let forumController = require("./controller/forum/forum");
+let reportController = require("./controller/report/report");
 app.get("/hello", (req, res) => {  //测试路由
     res.send("欢迎");
 })
 app.use("/user", userController);
 app.use("/admin",adminController);
 app.use("/news",newsController);
+app.use("/carousel",carouselController);
+app.use("/comment",commentController);
+app.use("/forum",forumController);
+app.use("/report",reportController);
 
 //错误处理中间件
 app.use((err, req, res, next) => {
     if (err instanceof Joi.ValidationError) {
-        return res.send({status:"1",massage:err.message});
+        return res.send({status:"3300",massage:err.message});
     }
     if (err.name === "UnauthorizedError") {
         return res.send({status:"3",massage:"身份验证失败"});
     }
-    res.send({status:"2",massage:"未知错误"+err})
+    res.send({status:"4040",massage:"未知错误"+err})
 })
 //配置项目端口
 app.listen(4000, () => {

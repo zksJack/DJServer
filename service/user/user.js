@@ -16,7 +16,7 @@ exports.getAllUserInfo = (req, res) => {
         sql = 'SELECT SQL_CALC_FOUND_ROWS id,username,id_card,phone,total_score,disabled FROM tb_user'
     let sqlParams = [m, limit];
     db.query(sql, sqlParams, function (err, result) {
-        if (err) throw err;
+        if (err) return res.send({ status: "3306", massage: err.message });
         var sql1 = "SELECT FOUND_ROWS() as count"
         db.query(sql1, function (err, total) {
             res.send({ status: "0", massage: "查询成功", total: total[0].count, data: result });
@@ -26,8 +26,10 @@ exports.getAllUserInfo = (req, res) => {
 exports.getUserInfo = (req, res) => {
     let sql = "SELECT u.id,username,phone,nation,wx_num,qq_num,age,sex,total_score,education,job_rank,join_party_time,u.disabled,c.branch_name FROM tb_user u ,tb_coordinate c WHERE u.id = ? and u.branch_id = c.branch_id"
     let sqlParams = [req.body.userID];
+    console.log(sqlParams);
     db.query(sql, sqlParams, function (err, result) {
-        if (err) throw err;
+        if (err) return res.send({ status: "3306", massage: err.message });
+        console.log(result);
         res.send({ status: "0", massage: "查询成功", data: result[0] });
     })
 }
@@ -36,9 +38,11 @@ exports.operationState = (req, res) => {
     let sql = "UPDATE tb_user SET disabled = ? WHERE id =?"
     let sqlParams = [req.body.disabled, req.body.userID]
     db.query(sql, sqlParams, function (err, result) {
-        if (err) throw err;
+        if (err) return res.send({ status: "3306", massage: err.message });
         if (result.affectedRows) {
             res.send({ status: "0", massage: "更改成功" });
+        }else{
+            res.send({ status: "1", massage: "更改失败" });
         }
     })
 }
@@ -48,9 +52,11 @@ exports.resetPWD = (req, res) => {
     let password = bcryptjs.hashSync("123456", 10);
     let sqlParams = [password, req.body.userID]
     db.query(sql, sqlParams, function (err, result) {
-        if (err) throw err;
+        if (err) return res.send({ status: "3306", massage: err.message });
         if (result.affectedRows) {
             res.send({ status: "0", massage: "更改成功" });
+        }else{
+            res.send({ status: "1", massage: "更改失败" });
         }
     })
 }
@@ -59,8 +65,8 @@ exports.getUserByName = (req, res) => {
     let str = '%' + req.body.username + '%'
     let sqlParams = [str];
     db.query(sql, sqlParams, function (err, result) {
-        if (err) throw err;
-        res.send({ status: "0", massage: "查询成功", data: result });
+        if (err) return res.send({ status: "3306", massage: err.message });
+        res.send({ status: "0", massage: "查询成功", data: result[0]});
     })
 }
 //批量重置密码(根据id)
@@ -81,13 +87,14 @@ exports.batchReset = (req, res) => {
         sql += mysql.format(modelsql, item) + ";"
     })
     db.query(sql, function (err, result) {
-        if (err) throw err;
+        if (err) return res.send({ status: "3306", massage: err.message });
         console.log(result);
         if (result.affectedRows) {
             res.send({ status: "0", massage: "更改成功" });
+        }else{
+            res.send({ status: "1", massage: "更改失败" });
         }
     })
-
 }
 //批量导入
 exports.uploadExcel = (req, res) => {
@@ -104,7 +111,7 @@ exports.uploadExcel = (req, res) => {
     const result = xlsx.utils.sheet_to_json(sheet)  //EXCEL转为json对象
 
     if (result == null) {
-        return res.send({ status: "222", massage: "文件为空" });
+        return res.send({ status: "2222", massage: "文件为空" });
     }
     let sqlParams = [];
     let flag = true;
@@ -122,14 +129,16 @@ exports.uploadExcel = (req, res) => {
         console.log("被坑了");
     }
     if (!flag) { //数据验证失败
-        return res.send({ status: "333", massage: "数据有空，请检查" });
+        return res.send({ status: "3333", massage: "数据有空，请检查" });
     } else {  //批量插入
         let sql = `INSERT INTO tb_user(username,password,id_card,phone,header,nation,branch_id,wx_num,qq_num,age,sex,total_score,party_status,birthday,special,education,job_rank,hometown,address,join_party_time,lead_person,salary,last_pay_time,disabled) VALUES ?`
         db.query(sql, [sqlParams], function (err, result) {
-            if (err) throw err;
+            if (err) return res.send({ status: "3306", massage: err.message });
             console.log(result);
             if (result.affectedRows) {
                 res.send({ status: "0", massage: "导入成功" });
+            }else{
+                res.send({ status: "1", massage: "导入失败" });
             }
         })
     }
