@@ -23,6 +23,7 @@ exports.getAllUserInfo = (req, res) => {
         })
     });
 }
+//
 exports.getUserInfo = (req, res) => {
     let sql = "SELECT u.id,username,phone,nation,wx_num,qq_num,age,sex,total_score,education,job_rank,join_party_time,u.disabled,c.branch_name FROM tb_user u ,tb_coordinate c WHERE u.id = ? and u.branch_id = c.branch_id"
     let sqlParams = [req.body.userID];
@@ -60,13 +61,14 @@ exports.resetPWD = (req, res) => {
         }
     })
 }
+//模糊查询 
 exports.getUserByName = (req, res) => {
     let sql = "SELECT id,username,id_card,phone,total_score,disabled FROM tb_user WHERE username LIKE ?"
     let str = '%' + req.body.username + '%'
     let sqlParams = [str];
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
-        res.send({ status: "0", massage: "查询成功", data: result[0]});
+        res.send({ status: "0", massage: "查询成功", data: result});
     })
 }
 //批量重置密码(根据id)
