@@ -89,7 +89,7 @@ exports.batchReset = (req, res) => {
     db.query(sql, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
         console.log(result);
-        if (result.affectedRows) {
+        if (result.affectedRows||result[0].affectedRows) {
             res.send({ status: "0", massage: "更改成功" });
         }else{
             res.send({ status: "1", massage: "更改失败" });
