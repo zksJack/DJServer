@@ -6,7 +6,7 @@ exports.getAllNewsTypes = (req, res) => {
     let sql = "SELECT * FROM tb_news_type"
     let sqlParams = []
     db.query(sql, sqlParams, function (err, result) {
-          if (err) return res.send({ status: "3306", massage: err.message });
+        if (err) return res.send({ status: "3306", massage: err.message });
         res.send({ status: "0", massage: "查询成功", data: result });
     })
 }
@@ -26,10 +26,10 @@ exports.getAllNews = (req, res) => {
         sqlParams = [req.body.type, m, limit];
     }
     db.query(sql, sqlParams, function (err, result) {
-          if (err) return res.send({ status: "3306", massage: err.message });
+        if (err) return res.send({ status: "3306", massage: err.message });
         var sql1 = "SELECT FOUND_ROWS() as count"
         db.query(sql1, function (err, total) {
-              if (err) return res.send({ status: "3306", massage: err.message });
+            if (err) return res.send({ status: "3306", massage: err.message });
             res.send({ status: "0", massage: "查询成功", total: total[0].count, data: result });
         })
     })
@@ -39,7 +39,7 @@ exports.getNewsById = (req, res) => {
     let sql = "SELECT n.*,typeName FROM tb_news n,tb_news_type t WHERE n.type = t.newsType_id and news_id = ?"
     let sqlParams = [req.body.newID]
     db.query(sql, sqlParams, function (err, result) {
-          if (err) return res.send({ status: "3306", massage: err.message });
+        if (err) return res.send({ status: "3306", massage: err.message });
         res.send({ status: "0", massage: "查询成功", data: result[0] });
     })
 }
@@ -48,7 +48,7 @@ exports.deleteNewsById = (req, res) => {
     let sql = "DELETE FROM tb_news WHERE news_id = ?"
     let sqlParams = [req.body.newID]
     db.query(sql, sqlParams, function (err, result) {
-          if (err) return res.send({ status: "3306", massage: err.message });
+        if (err) return res.send({ status: "3306", massage: err.message });
         if (result.affectedRows)
             res.send({ status: "0", massage: "删除成功" });
         else {
@@ -100,10 +100,10 @@ exports.insertNews = (req, res) => {
         0];
     console.log(sqlParams);
     db.query(sql, sqlParams, function (err, result) {
-          if (err) return res.send({ status: "3306", massage: err.message });
-        if (result.affectedRows)
-         res.send({ status: "0", massage: "插入成功" });
-         else {
+        if (err) return res.send({ status: "3306", massage: err.message });
+        if (result.affectedRows||result[0].affectedRows)
+            res.send({ status: "0", massage: "插入成功" });
+        else {
             res.send({ status: "1", massage: "插入失败" });
         }
     })
