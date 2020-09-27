@@ -19,10 +19,10 @@ exports.getAllNews = (req, res) => {
     let sql = '';
     let sqlParams = [];
     if (req.body.type == undefined || req.body.type == null || req.body.type == '') {
-        sql = "SELECT SQL_CALC_FOUND_ROWS n.*,typeName FROM tb_news_type t LEFT JOIN tb_news n ON n.type = t.newsType_id limit ?,?"
+        sql = "SELECT SQL_CALC_FOUND_ROWS n.*,typeName FROM tb_news_type t LEFT JOIN tb_news n ON n.type = t.newsType_id WHERE n.news_id is not null LIMIT ?,?"
         sqlParams = [m, limit];
     } else {
-        sql = "SELECT SQL_CALC_FOUND_ROWS n.*,typeName FROM tb_news_type t LEFT JOIN tb_news n ON n.type = t.newsType_id WHERE n.type=? limit ?,?";
+        sql = "SELECT SQL_CALC_FOUND_ROWS n.*,typeName FROM tb_news_type t LEFT JOIN tb_news n ON n.type = t.newsType_id WHERE n.type=? AND  n.news_id is not null LIMIT ?,?";
         sqlParams = [req.body.type, m, limit];
     }
     db.query(sql, sqlParams, function (err, result) {
