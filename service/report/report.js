@@ -46,6 +46,7 @@ exports.batchAccept = (req, res) => {
 
     let sqlParams = [];
     let values = req.body.reportIds;
+   // let values = [{id:"0EBBE337EA13446186C5B0168FAE0EB6"},{id:"9A616EFE9271413BBFF150766768D664"}]
     values.forEach((item, index) => {
         sqlParams.push(['1',item.id]);
     })
