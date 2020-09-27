@@ -12,10 +12,10 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 //托管静态资源
-app.use(express.static(path.join(__dirname,"./uploads")));
+app.use("/uploads",express.static(path.join(__dirname,"uploads")));
 // 配置token 验证权限
 //配置express-jet中间件 res.user可以获取 unless过滤路由  
-app.use(expressJWT({secret:config.jwtSecretKey}).unless({path:[/^\/admin\//]})); //unless 过滤不需要验证的路由
+app.use(expressJWT({secret:config.jwtSecretKey}).unless({path:[/^\/admin\//,/^\/uploads\//]})); //unless 过滤不需要验证的路由
 //引入一级路由
 let userController = require("./controller/user/user");
 let adminController = require("./controller/admin/login");
