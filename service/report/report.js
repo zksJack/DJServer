@@ -46,7 +46,7 @@ exports.batchAccept = (req, res) => {
 
     let sqlParams = [];
     let values = req.body.reportIds;
-   // let values = [{id:"0EBBE337EA13446186C5B0168FAE0EB6"},{id:"9A616EFE9271413BBFF150766768D664"}]
+    //let values = [{id:"0EBBE337EA13446186C5B0168FAE0EB6"}]
     values.forEach((item, index) => {
         sqlParams.push(['1',item.id]);
     })
@@ -58,7 +58,7 @@ exports.batchAccept = (req, res) => {
     })
     db.query(sql, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
-        if (result[0].affectedRows || result.affectedRows ) {
+        if (result.affectedRows || result[0].affectedRows ) {
             res.send({ status: "0", massage: "更改成功" });
         }else{
             res.send({ status: "1", massage: "更改失败" });
