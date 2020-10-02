@@ -8,7 +8,7 @@ const upload = multer({ storage: multer.memoryStorage() }) // 上传文件使用
 // 引入controller的逻辑处理函数
 let userService = require("../../service/user/user");
 //导入校验规则对象
-let {user_schema,user_name_schema,user_login_schema,user_upDatePWD_schema} = require("../../shema/user/user");
+let {user_schema,user_name_schema,user_login_schema,user_upDatePWD_schema,user_updateInfo} = require("../../shema/user/user");
 let Router = express.Router();
 
 Router.post("/getAllUserInfo",userService.getAllUserInfo);
@@ -22,7 +22,7 @@ Router.post("/uploadExcel",upload.any(),userService.uploadExcel);
 /**手机端 */
 Router.post("/userLogin",expressJoi(user_login_schema),userService.userLogin);
 Router.post("/updatePWD",expressJoi(user_upDatePWD_schema),userService.updatePWD);
-Router.post("/updateUserInfo",userService.updateUserInfo);
+Router.post("/updateUserInfo",expressJoi(user_updateInfo),userService.updateUserInfo);
 
 
 module.exports =Router;

@@ -18,6 +18,15 @@ exports.pageQuery = (req, res) => {
         }
     });
 }
+//根据id查询轮播
+exports.selectByID = (req, res) => {
+    let sql = '	SELECT * FROM tb_carousel WHERE id = ?';
+    let sqlParams = [req.body.carouselId];
+    db.query(sql, sqlParams, function (err, result) {
+        if (err) return res.send({ status: "3306", massage: err.message });
+        res.send({ status: "0", massage: "查询成功" ,data:result[0]});
+    })
+}
 //根据id删除轮播
 exports.deleteByID = (req, res) => {
     let sql = '	DELETE FROM tb_carousel WHERE id = ?';

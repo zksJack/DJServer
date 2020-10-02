@@ -1,11 +1,12 @@
 let Joi = require("@hapi/joi");
+let JoiUtils = require('../../utils/joiUtile')
 let userID = Joi.string().max(30).required();
 let username = Joi.string().max(30).required();
-let disabled = Joi.string()
+
 exports.user_schema={
     body:{
         userID,
-        disabled
+        disabled:Joi.string()
     }
 }
 exports.user_name_schema={
@@ -24,5 +25,22 @@ exports.user_upDatePWD_schema={
         id_card:username,
         oldPassword:username,
         newPassword:username,
+    }
+}
+exports.user_updateInfo={
+    body:{
+        username:JoiUtils.IS_STRING_NOT_NULL,
+        id_card:JoiUtils.IS_id_Card,
+        phone:JoiUtils.IS_STRING_NOT_NULL,
+        nation:JoiUtils.IS_STRING_NOT_NULL,
+        wx_num:JoiUtils.IS_STRING_NOT_NULL,
+        qq_num:JoiUtils.IS_QQ,
+        age:JoiUtils.IS_INT_NOT_NULL,
+        sex:JoiUtils.IS_sex,
+        birthday:JoiUtils.IS_birthday,
+        education:JoiUtils.IS_chinese,
+        job_rank:JoiUtils.IS_chinese,
+        address:JoiUtils.IS_STRING_NOT_NULL,
+        userId:JoiUtils.IS_NOT_NULL
     }
 }

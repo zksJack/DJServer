@@ -8,4 +8,5 @@ Router.post("/deleteByID",carouselService.deleteByID);
 Router.post("/batchDelete",carouselService.batchDelete);
 Router.post("/updateById",carouselService.updateById);
 Router.post("/insertById",carouselService.insertById);
+Router.post("/selectByID",carouselService.selectByID);
 module.exports =Router

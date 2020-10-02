@@ -8,13 +8,14 @@ let upload = multer({dest:path.join(__dirname,"../../uploads")})
 let expressJoi = require('@escook/express-joi');
 let newsService = require("../../service/news/news");
 
-let {} = require("../../shema/news/news");
+let {news_Info_schema} = require("../../shema/news/news");
 /***没有加数据验证 后期补充 */
 let Router = express.Router();
 Router.get("/getAllNewsTypes",newsService.getAllNewsTypes);
 Router.post("/getAllNews",newsService.getAllNews);
 Router.post("/getNewsById",newsService.getNewsById);
 Router.post("/deleteNewsById",newsService.deleteNewsById);
-Router.post("/updateNewsById",upload.single('pic'),newsService.updateNewsById);
-Router.post("/insertNews",upload.single('pic'),newsService.insertNews);
+Router.post("/updateNewsById",upload.single('pic'),expressJoi(news_Info_schema),newsService.updateNewsById);
+Router.post("/updateNewsNoPicById",expressJoi(news_Info_schema), newsService.updateNewsNoPicById);
+Router.post("/insertNews",upload.single('pic'),expressJoi(news_Info_schema),newsService.insertNews);
 module.exports =Router

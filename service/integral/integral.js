@@ -72,7 +72,7 @@ exports.deleteById = (req, res) => {
 exports.insertUserInfo = (req, res) => {
     let sql = 'INSERT INTO tb_integral(user_id,type,type_name,cur_max,single_desc,max_num,create_time) VALUES(?,?,?,?,?,?,now())';
     let sqlParams = [
-        req.body.user_id,
+        req.body.userId,
         req.body.type, 
         req.body.type_name,
         req.body.cur_max,
@@ -133,7 +133,7 @@ exports.updateUserJifen = (req, res) => {
 exports.updateCurMax = (req, res) => {
     
     let sql1 = 'SELECT* FROM tb_integral WHERE user_id = ? and type = ?'
-    let sqlParams1 = [req.body.user_id,req.body.type];
+    let sqlParams1 = [req.body.userId,req.body.type];
     db.query(sql1, sqlParams1, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
         if (result[0]) {
@@ -156,9 +156,5 @@ exports.updateCurMax = (req, res) => {
         } else {
             res.send({ status: "1", massage: "首次进行本积分，请先添加一条本类型的积分记录" });
         }
-    })
-
-
-
-    
+    })   
 }

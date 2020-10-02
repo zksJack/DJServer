@@ -48,7 +48,7 @@ app.use((err, req, res, next) => {
     if (err.name === "UnauthorizedError") {
         return res.send({status:"3",massage:"身份验证失败"});
     }
-    res.send({status:"4040",massage:"未知错误"+err})
+    res.send({status:"4040",massage:"未知错误"+ err})
 })
 //配置项目端口
 app.listen(4000, () => {
