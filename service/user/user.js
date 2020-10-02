@@ -1,5 +1,7 @@
 let mysql = require('mysql');
 let db = require('../../dao/mysqlDB');
+let jsonwebtoken = require("jsonwebtoken");//根据用户信息生成一个token
+let config = require('../../config');            //jwt配置
 let bcryptjs = require("bcryptjs");
 let xlsx = require('xlsx')
 //获取所有用户信息
@@ -146,3 +148,81 @@ exports.uploadExcel = (req, res) => {
     }
     //  return res.json(sqlParams);
 }
+
+/**************** 手机端 *******************************/
+//用户登录
+exports.userLogin = (req, res) => {
+    //从数据库中拿数据扔到前端就ok  so easy
+    let sql = 'SELECT username,password FROM tb_user WHERE id_card =? '
+    let sqlparams = [req.body.id_card];
+    db.query(sql, sqlparams, function (err, result){
+        if (err) throw err;
+        if (!result[0]) {
+            return res.send({ status: "1", massage: "用户不存在" });
+        } else {
+            if (bcryptjs.compareSync(req.body.password,result[0].password)) {
+                let user = {username:result[0].username}
+                let tokenStr = jsonwebtoken.sign(user,config.jwtSecretKey,{expiresIn:config.expiresIn});
+                return res.send({ status: "0", massage: "查询成功", token: tokenStr});
+            } else {
+                return res.send({ status: "1", massage: "密码错误" });
+            }
+        }
+    });
+}
+//修改密码
+exports.updatePWD = (req, res) => {
+    let sql1 = 'SELECT password FROM tb_user WHERE id_card= ?'
+    let sqlParams1 = [req.body.id_card]
+    db.query(sql1, sqlParams1, function (err, result) {
+        if (err) return res.send({ status: "3306", massage: err.message });
+        if (result[0]) {
+            if (bcryptjs.compareSync(req.body.oldPassword,result[0].password)){
+                let sql = "UPDATE tb_user SET password = ? WHERE id_card =?"
+                let newPassword = bcryptjs.hashSync(req.body.newPassword, 10);
+                let sqlParams = [newPassword, req.body.id_card]
+                db.query(sql, sqlParams, function (err, result) {
+                    if (err) return res.send({ status: "3306", massage: err.message });
+                    if (result.affectedRows) {
+                        res.send({ status: "0", massage: "更改成功" });
+                    }else{
+                        res.send({ status: "1", massage: "更改失败" });
+                    }
+                })
+            }else{
+                res.send({ status: "1", massage: "密码错误" });
+            }
+        }else{
+            res.send({ status: "1", massage: "用户不存在" });
+        }
+    })
+}
+//更新个人信息
+exports.updateUserInfo =(req,res)=>{
+    let sql = 'UPDATE tb_user SET username=?,id_card=?,phone=?,nation=?,wx_num=?,qq_num=?,age=?,sex=?,birthday=?,education=?,job_rank=?,address=? WHERE id =?';
+    let sqlParams = [
+            req.body.username,
+            req.body.id_card,
+            req.body.phone,
+            req.body.nation,
+            req.body.wx_num,
+            req.body.qq_num,
+            req.body.age,
+            req.body.sex,
+            req.body.birthday,
+            req.body.education,
+            req.body.job_rank,
+            req.body.address,
+            req.body.userId
+        ];
+    db.query(sql, sqlParams, function (err, result) {
+        if (err) return res.send({ status: "3306", massage: err.message });
+        if (result.affectedRows) {
+            res.send({ status: "0", massage: "更改成功" });
+        }else{
+            res.send({ status: "1", massage: "更改失败" });
+        }
+    })
+}
+//插入个人信息
+

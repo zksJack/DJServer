@@ -24,6 +24,9 @@ let carouselController = require("./controller/carousel/carousel");
 let commentController = require("./controller/comment/comment");
 let forumController = require("./controller/forum/forum");
 let reportController = require("./controller/report/report");
+let noticeController = require("./controller/notice/notice");
+let integralController = require("./controller/integral/integral");
+
 app.get("/hello", (req, res) => {  //测试路由
     res.send("欢迎");
 })
@@ -34,6 +37,8 @@ app.use("/carousel",carouselController);
 app.use("/comment",commentController);
 app.use("/forum",forumController);
 app.use("/report",reportController);
+app.use("/notice",noticeController);
+app.use("/integral",integralController);
 
 //错误处理中间件
 app.use((err, req, res, next) => {

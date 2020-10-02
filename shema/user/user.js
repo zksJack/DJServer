@@ -13,3 +13,16 @@ exports.user_name_schema={
         username
     }
 }
+exports.user_login_schema={
+    body:{
+        id_card:username,
+        password:username
+    }
+}
+exports.user_upDatePWD_schema={
+    body:{
+        id_card:username,
+        oldPassword:username,
+        newPassword:username,
+    }
+}

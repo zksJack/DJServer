@@ -50,7 +50,7 @@ exports.selectIsCommenting =(req,res)=>{
 
 //修改信息根据ID
 exports.updateById=(req,res)=>{
-    let sql = 'UPDATE tb_comment SET content=?, title_desc =?,is_open = ? WHERE id = ?';
+    let sql = 'UPDATE tb_comment SET create_time = now(), content=?, title_desc =?,is_open = ? WHERE id = ?';
     let sqlParams = [req.body.content,req.body.title_desc,req.body.is_open,req.body.commentID];
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
@@ -62,7 +62,7 @@ exports.updateById=(req,res)=>{
     })
 
 }
-//修改信息根据ID
+//插入信息根据ID
 exports.inserCommen=(req,res)=>{
     let sql = 'INSERT INTO tb_comment(id,create_time,content, title_desc,is_open) VALUES (?,now(),?,?,1)';
     let sqlParams = [req.body.commentID,req.body.content,req.body.title_desc];
@@ -76,3 +76,4 @@ exports.inserCommen=(req,res)=>{
     })
 
 }
+/*********************手机端************************************* */
