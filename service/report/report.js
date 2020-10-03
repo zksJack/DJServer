@@ -6,8 +6,8 @@ exports.pageQuery =(req,res)=>{
     (page <= 0) && (page = 1);
     let limit = req.body.limit * 1 || 10;
     let m = (page - 1) * limit;
-    let sql = 'SELECT SQL_CALC_FOUND_ROWS r.id,r.user_id,r.pic_id,r.create_time,r.type,r.is_accept,r.reason,u.username FROM tb_report r,tb_user u WHERE r.user_id = u.id  ORDER BY create_time desc LIMIT ?,?';
-    let sqlParams = [m, limit];
+    let sql = 'SELECT SQL_CALC_FOUND_ROWS r.id,r.user_id,r.pic_id,r.create_time,r.type,r.is_accept,r.reason,u.username FROM tb_report r,tb_user u WHERE r.user_id = u.id AND type= ? ORDER BY create_time desc LIMIT ?,?';
+    let sqlParams = [req.body.type, m, limit];
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
         var sql1 = "SELECT FOUND_ROWS() as count"
