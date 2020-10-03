@@ -6,6 +6,7 @@ let expressJWT = require("express-jwt");    //跨域token鉴权 解析token
 let config = require('./config');            //jwt配置
 let path = require("path");
 let app = express();
+let fs = require('fs')
 // 配置跨域
 app.use(cors());
 // 配置body-parser
@@ -42,6 +43,14 @@ app.use("/integral",integralController);
 
 //错误处理中间件
 app.use((err, req, res, next) => {
+   // console.log(req.file);
+    if(req.file){  //如果出错先把图片文件删了
+        try {
+            fs.unlinkSync(path.join(req.file.destination,req.file.filename));
+        } catch (error) {
+            console.log("图片没有");
+        }
+    }
     if (err instanceof Joi.ValidationError) {
         return res.send({status:"3300",massage:err.message});
     }

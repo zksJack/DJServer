@@ -1,6 +1,7 @@
 let mysql = require('mysql');
 let db = require('../../dao/mysqlDB');
 let path = require('path');
+let fs = require('fs')
 //轮播图列表（分页）
 exports.pageQuery = (req, res) => {
     let page = req.body.page || 1;
@@ -42,6 +43,7 @@ exports.deleteByID = (req, res) => {
 }
 //更新轮播信息
 exports.updateById = (req, res) => {
+   // fs.unlinkSync(path.join(__dirname,'../../uploads/'+req.file.filename));
     let sql = '';
     let sqlParams = [];
     if (req.file) {
@@ -67,7 +69,6 @@ exports.updateById = (req, res) => {
             req.body.carouselId
         ];
     }
-
     db.query(sql, sqlParams, function (err, result) {
         if (err)
             return res.send({ status: "3306", massage: err.message });
