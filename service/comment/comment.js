@@ -69,7 +69,7 @@ exports.updateById=(req,res)=>{
 }
 //插入信息根据ID
 exports.inserCommen=(req,res)=>{
-    let sql = 'INSERT INTO tb_comment(id,create_time,content, title_desc,is_open) VALUES (?,now(),?,?,1)';
+    let sql = 'INSERT INTO tb_comment(id,create_time,content, title_desc,is_open) VALUES (?,now(),?,?,0)';
     let sqlParams = [
         req.body.commentID,
         req.body.content,

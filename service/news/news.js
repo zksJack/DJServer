@@ -46,20 +46,21 @@ exports.getNewsById = (req, res) => {
     })
 }
 //根据newsID删除新闻信息
+/**新闻删除 轮播图要删除 轮播图删除 新闻不删除  未去实现 待定*/
 exports.deleteNewsById = (req, res) => {
-    let sqla = 'SELECT pic FROM tb_news WHERE news_id = ?';
-    let sqlParamsa = [req.body.newID];
-    db.query(sqla, sqlParamsa, function (err, resulta) {
-        if (err) throw err;
-        if (resulta) {
-            let sql = "DELETE FROM tb_news WHERE news_id = ?"
+    // let sqla = 'SELECT pic FROM tb_news WHERE news_id = ?';
+    // let sqlParamsa = [req.body.newID];
+    // db.query(sqla, sqlParamsa, function (err, resulta) {
+    //     if (err) throw err;
+    //     if (resulta) {
+            let sql = "DELETE FROM tb_news WHERE news_id = ?" //删除新闻   
             let sqlParams = [req.body.newID]
             db.query(sql, sqlParams, function (err, result) {
                 if (err) return res.send({ status: "3306", massage: err.message });
                 console.log(result);
-                if (result.affectedRows){
+                if (result.affectedRows) {
                     try {
-                        fs.unlinkSync(path.join(__dirname,'../..'+resulta[0].pic));
+                        fs.unlinkSync(path.join(__dirname, '../..' + resulta[0].pic));
                     } catch (error) {
                         console.log("图片没有");
                     }
@@ -69,48 +70,43 @@ exports.deleteNewsById = (req, res) => {
                     res.send({ status: "1", massage: "删除失败" });
                 }
             })
-        }
-    })
+    //     }
+    // })
 
 }
 //根据newsID更新新闻信息
 exports.updateNewsById = (req, res) => {
-    let sql = '';
-    let sqlParams = [];
-    if (req.file) {
-        sql = "UPDATE tb_news SET title=?,author=?,titleDesc=?,content=?, pic=?,update_time= now(),type=?,count=?,comment=? WHERE news_id=?"
-        sqlParams = [
-            req.body.title,
-            req.body.author,
-            req.body.titleDesc,
-            req.body.content,
-            path.join("/uploads", req.file.filename),
-            //  utils.dateFtt("yyyy-MM-dd hh:mm:ss",new Date()),
-            req.body.type,
-            0,
-            0,
-            req.body.newID];
-    } else {
-        sql = "UPDATE tb_news SET title=?,author=?,titleDesc=?,content=?,update_time= now(),type=?,count=?,comment=? WHERE news_id=?"
-        sqlParams = [
-            req.body.title,
-            req.body.author,
-            req.body.titleDesc,
-            req.body.content,
-            //  utils.dateFtt("yyyy-MM-dd hh:mm:ss",new Date()),
-            req.body.type,
-            0,
-            0,
-            req.body.newID];
-    }
-    db.query(sql, sqlParams, function (err, result) {
-        if (err) return res.send({ status: "3306", massage: err.message });
-        if (result.affectedRows)
-            res.send({ status: "0", massage: "更新成功" });
-        else {
-            res.send({ status: "1", massage: "更新失败" });
+    // let sqla = 'SELECT pic FROM tb_news WHERE news_id = ?';
+    // let sqlParamsa = [req.body.newID];
+    // db.query(sqla, sqlParamsa, function (err, resulta) {   //缓存图片路径
+    //     if (err) throw err;
+        let sql = '';
+        let sqlParams = [];
+        let flg = false; //若是ture 表示是更换图片
+        if (req.file) {
+            sql = "UPDATE tb_news SET title=?,author=?,titleDesc=?,content=?, pic=?,update_time= now(),type=?,count=?,comment=? WHERE news_id=?"
+            sqlParams = [ req.body.title,req.body.author,req.body.titleDesc,req.body.content,path.join("/uploads", req.file.filename),req.body.type,0, 0,req.body.newID];
+            flg = true;
+        } else {
+            sql = "UPDATE tb_news SET title=?,author=?,titleDesc=?,content=?,update_time= now(),type=?,count=?,comment=? WHERE news_id=?"
+            sqlParams = [req.body.title,req.body.author,req.body.titleDesc,req.body.content,req.body.type,0,0,req.body.newID];
         }
-    })
+        db.query(sql, sqlParams, function (err, result) {
+            if (err) return res.send({ status: "3306", massage: err.message });
+            if (result.affectedRows){
+                //更新完成后删除问件
+                try {
+                   flg && fs.unlinkSync(path.join(__dirname, '../..' + resulta[0].pic));
+                } catch (error) {
+                    console.log("图片没有");
+                }
+                res.send({ status: "0", massage: "更新成功" });
+                }
+            else {
+                res.send({ status: "1", massage: "更新失败" });
+            }
+        })
+    // })
 }
 //插入新闻信息
 exports.insertNews = (req, res) => {
@@ -139,19 +135,6 @@ exports.insertNews = (req, res) => {
             res.send({ status: "1", massage: "插入失败" });
         }
     })
-}
-// 缓存图片路径
-function getUrl(id) {
-    console.log("11");
-    let sql = 'SELECT pic FROM tb_news WHERE news_id = ?';
-    let sqlParams = [id];
-    let value = '';
-    db.query(sql, sqlParams, function (err, result) {
-        if (err) throw err;
-        value = result;
-    })
-    console.log(value);
-    return value;
 }
 // exports.all =(req,res)=>{
 //     let sql = "UPDATE tb_user SET disabled = ? WHERE username =?"

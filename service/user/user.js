@@ -154,7 +154,7 @@ exports.uploadExcel = (req, res) => {
 //用户登录
 exports.userLogin = (req, res) => {
     //从数据库中拿数据扔到前端就ok  so easy
-    let sql = 'SELECT username,password,id FROM tb_user WHERE id_card =? '
+    let sql = 'SELECT username,password,id,header FROM tb_user WHERE id_card =? '
     let sqlparams = [req.body.id_card];
     db.query(sql, sqlparams, function (err, result){
         if (err) throw err;
@@ -164,7 +164,7 @@ exports.userLogin = (req, res) => {
             if (bcryptjs.compareSync(req.body.password,result[0].password)) {
                 let user = {username:result[0].username}
                 let tokenStr = jsonwebtoken.sign(user,config.jwtSecretKey,{expiresIn:config.expiresIn});
-                return res.send({ status: "0", massage: "查询成功", token: tokenStr,data:result[0]});
+                return res.send({ status: "0", massage: "查询成功", token: tokenStr, data:result[0]});
             } else {
                 return res.send({ status: "1", massage: "密码错误" });
             }
