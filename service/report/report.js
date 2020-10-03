@@ -19,20 +19,26 @@ exports.pageQuery = (req, res) => {
 }
 //查询思想汇报
 exports.selectById = (req, res) => {
-    let sql = 'SELECT r.id,r.user_id,r.create_time,r.type,r.is_accept,r.reason,u.username,u.phone,u.age,u.sex FROM tb_report r,tb_user u WHERE r.user_id = u.id  AND r.id = ?';
+    let sql = 'SELECT p.pic_url FROM tb_report r,tb_picture p WHERE r.id= p.link_id  AND r.id = ?';
     let sqlParams = [req.body.reportId];
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
         console.log(result);
-        res.send({ status: "0", massage: "查询成功", data: result[0] });
+        res.send({ status: "0", massage: "查询成功", data: result});
     })
 }
 
 
 //更新思想汇报的审核状态
 exports.updateAccept = (req, res) => {
-    let sql = 'UPDATE tb_report SET is_accept = ?,reason =? WHERE id =?';
-    let sqlParams = [req.body.is_accept, req.body.reason, req.body.reportId];
+
+    let sql = 'UPDATE tb_report SET type = ?,reason =? ,is_accept=? WHERE id =?';
+    let sqlParams = [
+            req.body.type, 
+            req.body.reason, 
+            req.body.reportId,
+            req.body.type==1?1:2
+        ];
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
         if (result.affectedRows) {
@@ -51,10 +57,10 @@ exports.batchAccept = (req, res) => {
     let values = req.body.reportIds;
     //let values = [{id:"0EBBE337EA13446186C5B0168FAE0EB6"}]
     values.forEach((item, index) => {
-        sqlParams.push(['1', item.id]);
+        sqlParams.push([req.body.type==1?1:2,req.body.type,item.id]);
     })
     //查询语句拼接
-    let modelsql = "UPDATE tb_report SET is_accept = ? WHERE id =?";
+    let modelsql = "UPDATE tb_report SET is_accept = ?,type = ? WHERE id =?";
     let sql = '';
     sqlParams.forEach((item, index) => {
         sql += mysql.format(modelsql, item) + ";"

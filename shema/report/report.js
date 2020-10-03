@@ -20,3 +20,16 @@ exports.up_Accept_schema={
         userID:JoiUtils.IS_STRING_NOT_NULL,
     }
  }
+ exports.updateAccept_schema={
+    body:{
+        type:JoiUtils.IS_INT_NOT_NULL,
+        reason:JoiUtils.IS_STRING_NOT_NULL,
+        reportId:JoiUtils.IS_STRING_NOT_NULL,
+    }
+ }
+ exports.batchAccept_schema={
+    body:{
+        type:JoiUtils.IS_INT_NOT_NULL,
+        reportIds:Joi.any(),
+    }
+ }
