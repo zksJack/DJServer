@@ -97,7 +97,7 @@ exports.insertById = (req, res) => {
     db.query(sql, sqlParams, function (err, result) {
         if (err) 
             return res.send({ status: "3306", massage: err.message });
-        if (result[0].affectedRows || result.affectedRows ) 
+        if (result.affectedRows ) 
             res.send({ status: "0", massage: "插入成功" });
         else 
             res.send({ status: "0", massage: "插入失败" });
