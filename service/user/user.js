@@ -28,7 +28,7 @@ exports.getAllUserInfo = (req, res) => {
 }
 //
 exports.getUserInfo = (req, res) => {
-    let sql = "SELECT u.*,FROM tb_user u WHERE u.id = ?"
+    let sql = "SELECT u.* FROM tb_user u WHERE u.id = ?"
     let sqlParams = [req.body.userID];
     console.log(sqlParams);
     db.query(sql, sqlParams, function (err, result) {
