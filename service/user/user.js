@@ -1,4 +1,5 @@
 let mysql = require('mysql');
+let path = require('path');
 let db = require('../../dao/mysqlDB');
 let jsonwebtoken = require("jsonwebtoken");//根据用户信息生成一个token
 let config = require('../../config');            //jwt配置
@@ -199,22 +200,48 @@ exports.updatePWD = (req, res) => {
 }
 //更新个人信息
 exports.updateUserInfo =(req,res)=>{
-    let sql = 'UPDATE tb_user SET username=?,id_card=?,phone=?,nation=?,wx_num=?,qq_num=?,age=?,sex=?,birthday=?,education=?,job_rank=?,address=? WHERE id =?';
-    let sqlParams = [
-            req.body.username,
-            req.body.id_card,
-            req.body.phone,
-            req.body.nation,
-            req.body.wx_num,
-            req.body.qq_num,
-            req.body.age,
-            req.body.sex,
-            req.body.birthday,
-            req.body.education,
-            req.body.job_rank,
-            req.body.address,
-            req.body.userId
-        ];
+    let sql='';
+    let sqlParams=[];
+    if(req.file){
+        sql = 'UPDATE tb_user SET username=?,id_card=?,phone=?,nation=?,wx_num=?,qq_num=?,age=?,sex=?,education=?,job_rank=?,address=?,salary=?,party_status=?,hometown=?,header=? WHERE id =?';
+        sqlParams = [
+                req.body.username,
+                req.body.id_card,
+                req.body.phone,
+                req.body.nation,
+                req.body.wx_num,
+                req.body.qq_num,
+                req.body.age,
+                req.body.sex,
+                req.body.education,
+                req.body.job_rank,
+                req.body.address,
+                req.body.salary,  //工资
+                req.body.party_status,
+                req.body.hometown,
+                path.join("/uploads", req.file.filename),
+                req.body.userId
+            ];
+    }else{
+        sql = 'UPDATE tb_user SET username=?,id_card=?,phone=?,nation=?,wx_num=?,qq_num=?,age=?,sex=?,education=?,job_rank=?,address=?,salary=?,party_status=?,hometown=? WHERE id =?';
+        sqlParams = [
+                req.body.username,
+                req.body.id_card,
+                req.body.phone,
+                req.body.nation,
+                req.body.wx_num,
+                req.body.qq_num,
+                req.body.age,
+                req.body.sex,
+                req.body.education,
+                req.body.job_rank,
+                req.body.address,
+                req.body.salary,  //工资
+                req.body.party_status,
+                req.body.hometown,
+                req.body.userId
+            ];
+    }
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
         if (result.affectedRows) {

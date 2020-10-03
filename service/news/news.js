@@ -58,18 +58,34 @@ exports.deleteNewsById = (req, res) => {
 }
 //根据newsID更新新闻信息
 exports.updateNewsById = (req, res) => {
-    let sql = "UPDATE tb_news SET title=?,author=?,titleDesc=?,content=?, pic=?,update_time= now(),type=?,count=?,comment=? WHERE news_id=?"
-    let sqlParams = [
-        req.body.title,
-        req.body.author,
-        req.body.titleDesc,
-        req.body.content,
-        path.join("/uploads", req.file.filename),
-        //  utils.dateFtt("yyyy-MM-dd hh:mm:ss",new Date()),
-        req.body.type,
-        0,
-        0,
-        req.body.newID];
+    let sql='';
+    let sqlParams=[];
+    if(req.file){
+            sql = "UPDATE tb_news SET title=?,author=?,titleDesc=?,content=?, pic=?,update_time= now(),type=?,count=?,comment=? WHERE news_id=?"
+            sqlParams = [
+            req.body.title,
+            req.body.author,
+            req.body.titleDesc,
+            req.body.content,
+            path.join("/uploads", req.file.filename),
+            //  utils.dateFtt("yyyy-MM-dd hh:mm:ss",new Date()),
+            req.body.type,
+            0,
+            0,
+            req.body.newID];
+    }else{
+            sql = "UPDATE tb_news SET title=?,author=?,titleDesc=?,content=?,update_time= now(),type=?,count=?,comment=? WHERE news_id=?"
+            sqlParams = [
+            req.body.title,
+            req.body.author,
+            req.body.titleDesc,
+            req.body.content,
+            //  utils.dateFtt("yyyy-MM-dd hh:mm:ss",new Date()),
+            req.body.type,
+            0,
+            0,
+            req.body.newID];
+    }
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
         if (result.affectedRows)
@@ -79,29 +95,6 @@ exports.updateNewsById = (req, res) => {
         }
     })
 }
-//根据newsID更新新闻信息
-exports.updateNewsNoPicById = (req, res) => {
-    let sql = "UPDATE tb_news SET title=?,author=?,titleDesc=?,content=?,update_time= now(),type=?,count=?,comment=? WHERE news_id=?"
-    let sqlParams = [
-        req.body.title,
-        req.body.author,
-        req.body.titleDesc,
-        req.body.content,
-        //  utils.dateFtt("yyyy-MM-dd hh:mm:ss",new Date()),
-        req.body.type,
-        0,
-        0,
-        req.body.newID];
-    db.query(sql, sqlParams, function (err, result) {
-        if (err) return res.send({ status: "3306", massage: err.message });
-        if (result.affectedRows)
-            result.affectedRows && res.send({ status: "0", massage: "更新成功" });
-        else {
-            res.send({ status: "1", massage: "更新失败" });
-        }
-    })
-}
-
 //插入新闻信息
 exports.insertNews = (req, res) => {
     // console.log(req.body);

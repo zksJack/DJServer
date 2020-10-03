@@ -4,7 +4,7 @@ module.exports={
     IS_INT_NOT_NULL:Joi.number().required().error(new Error('数据必须是数字')),
     IS_STRING_NOT_NULL:Joi.string().required().error(new Error('数据必须是字符型')),
     IS_email: Joi.string().email().required().error(new Error('邮箱格式不正确')),
-    IS_sex:Joi.number().valid(0,1).required().error(new Error('性别格式不正确')),
+    IS_sex:Joi.number().valid(1,2).required().error(new Error('性别格式不正确')),
     IS_pwd:Joi.string().regex(/^[a-zA-Z0-9]+$/).error(new Error('密码格式不正确')),
     IS_phone:Joi.string().regex(/^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/).error(new Error('手机号格式不正确')),
     IS_id_Card:Joi.string().regex(/^\d{15}|\d{18}$/).error(new Error('身份证格式不正确')),

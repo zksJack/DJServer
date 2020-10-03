@@ -4,7 +4,9 @@ let express = require("express");
 let expressJoi = require('@escook/express-joi');
 
 const multer = require('multer')
-const upload = multer({ storage: multer.memoryStorage() }) // 上传文件使用缓存策略
+let path = require('path');
+const upload = multer({ storage: multer.memoryStorage()}) // 上传文件使用缓存策略
+let uploads = multer({dest:path.join(__dirname,"../../uploads")})
 // 引入controller的逻辑处理函数
 let userService = require("../../service/user/user");
 //导入校验规则对象
@@ -22,7 +24,7 @@ Router.post("/uploadExcel",upload.any(),userService.uploadExcel);
 /**手机端 */
 Router.post("/userLogin",expressJoi(user_login_schema),userService.userLogin);
 Router.post("/updatePWD",expressJoi(user_upDatePWD_schema),userService.updatePWD);
-Router.post("/updateUserInfo",expressJoi(user_updateInfo),userService.updateUserInfo);
+Router.post("/updateUserInfo",uploads.single('header'),expressJoi(user_updateInfo),userService.updateUserInfo);
 
 
 module.exports =Router;

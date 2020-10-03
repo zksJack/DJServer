@@ -37,10 +37,12 @@ exports.user_updateInfo={
         qq_num:JoiUtils.IS_QQ,
         age:JoiUtils.IS_INT_NOT_NULL,
         sex:JoiUtils.IS_sex,
-        birthday:JoiUtils.IS_birthday,
         education:JoiUtils.IS_chinese,
         job_rank:JoiUtils.IS_chinese,
         address:JoiUtils.IS_STRING_NOT_NULL,
+        salary:JoiUtils.IS_INT_NOT_NULL,
+        party_status:JoiUtils.IS_INT_NOT_NULL,
+        hometown:JoiUtils.IS_STRING_NOT_NULL,
         userId:JoiUtils.IS_NOT_NULL
     }
 }

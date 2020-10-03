@@ -85,9 +85,8 @@ exports.batchDelete = (req, res) => {
 //
 //插入轮播信息
 exports.insertById = (req, res) => {
-    let sql = 'INSERT INTO tb_carousel(id,title,url, img_url, priority ,type,status ,create_time) VALUES(?,?,?,?,?,?,?,now())';
+    let sql = 'INSERT INTO tb_carousel(title,url, img_url, priority ,type,status ,create_time) VALUES(?,?,?,?,?,?,?,now())';
     let sqlParams = [
-        req.body.carouselId,
         req.body.title,
         req.body.url,
         req.body.img_url,

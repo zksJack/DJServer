@@ -26,6 +26,35 @@ exports.selectById =(req,res)=>{
         res.send({ status: "0", massage: "查询成功", data: result[0] });
     })
 }
+// //插入思想报告信息
+// exports.insertReport = (req, res) => {
+//     // console.log(req.body);
+//     // console.log(req.file);
+//     if (!req.file || req.file.fieldname !== 'pic') {
+//         return res.send({ status: '1', massage: "图片不能为空" });
+//     }
+//     let sql = "INSERT INTO tb_news(title,author,titleDesc,content, pic,create_time,type,count,comment) VALUES(?,?,?,?,?,now(),?,?,?)"
+//     let sqlParams = [
+//         req.body.title,
+//         req.body.author,
+//         req.body.titleDesc,
+//         req.body.content,
+//         path.join("/uploads", req.file.filename),
+//         //  utils.dateFtt("yyyy-MM-dd hh:mm:ss",new Date()),
+//         req.body.type,
+//         0,
+//         0];
+//     console.log(sqlParams);
+//     db.query(sql, sqlParams, function (err, result) {
+//         if (err) return res.send({ status: "3306", massage: err.message });
+//         if (result.affectedRows||result[0].affectedRows)
+//             res.send({ status: "0", massage: "插入成功" });
+//         else {
+//             res.send({ status: "1", massage: "插入失败" });
+//         }
+//     })
+// }
+
 //更新思想汇报的审核状态
 exports.updateAccept =(req,res)=>{
     let sql = 'UPDATE tb_report SET is_accept = ?,reason =? WHERE id =?';
