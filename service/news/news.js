@@ -106,7 +106,7 @@ exports.updateNewsById = (req, res) => {
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
         if (result.affectedRows)
-            result.affectedRows && res.send({ status: "0", massage: "更新成功" });
+            res.send({ status: "0", massage: "更新成功" });
         else {
             res.send({ status: "1", massage: "更新失败" });
         }
