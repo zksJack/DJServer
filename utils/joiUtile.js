@@ -1,8 +1,8 @@
 let Joi = require("@hapi/joi");
 module.exports={
-    IS_NOT_NULL:Joi.any().required().error(new Error('数据不能为空')),
-    IS_INT_NOT_NULL:Joi.number().required().error(new Error('数据必须是数字')),
-    IS_STRING_NOT_NULL:Joi.string().required().error(new Error('数据必须是字符型')),
+    IS_NOT_NULL:Joi.any().required(),
+    IS_INT_NOT_NULL:Joi.number().required(),
+    IS_STRING_NOT_NULL:Joi.string().required(),
     IS_email: Joi.string().email().required().error(new Error('邮箱格式不正确')),
     IS_sex:Joi.number().valid(1,2).required().error(new Error('性别格式不正确')),
     IS_pwd:Joi.string().regex(/^[a-zA-Z0-9]+$/).error(new Error('密码格式不正确')),
