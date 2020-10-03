@@ -1,5 +1,6 @@
 let mysql = require('mysql');
 let db = require('../../dao/mysqlDB');
+let path = require('path');
 //轮播图列表（分页）
 exports.pageQuery = (req, res) => {
     let page = req.body.page || 1;
@@ -24,7 +25,7 @@ exports.selectByID = (req, res) => {
     let sqlParams = [req.body.carouselId];
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
-        res.send({ status: "0", massage: "查询成功" ,data:result[0]});
+        res.send({ status: "0", massage: "查询成功", data: result[0] });
     })
 }
 //根据id删除轮播
@@ -33,30 +34,46 @@ exports.deleteByID = (req, res) => {
     let sqlParams = [req.body.carouselId];
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
-        if (result.affectedRows) 
+        if (result.affectedRows)
             res.send({ status: "0", massage: "删除成功" });
-        else 
+        else
             res.send({ status: "0", massage: "删除失败" });
     })
 }
 //更新轮播信息
 exports.updateById = (req, res) => {
-    let sql = 'update tb_carousel set title = ?,url = ?, img_url = ?, priority = ?,type = ?,status = ?,create_time = now() WHERE id = ?';
-    let sqlParams = [
-        req.body.title,
-        req.body.url,
-        req.body.img_url,
-        parseInt(req.body.priority),
-        parseInt(req.body.type),
-        parseInt(req.body.status),
-        req.body.carouselId
-    ];
+    let sql = '';
+    let sqlParams = [];
+    if (req.file) {
+        sql = 'update tb_carousel set title = ?,url = ?, img_url = ?, priority = ?,type = ?,status = ?,create_time = now() WHERE id = ?';
+        sqlParams = [
+            req.body.title,
+            req.body.url,
+            path.join("/uploads", req.file.filename),
+            parseInt(req.body.priority),
+            parseInt(req.body.type),
+            parseInt(req.body.status),
+            req.body.carouselId
+        ];
+    } else {
+        sql = 'update tb_carousel set title = ?,url = ?, img_url = ?, priority = ?,type = ?,status = ?,create_time = now() WHERE id = ?';
+        sqlParams = [
+            req.body.title,
+            req.body.url,
+            req.body.img_url,
+            parseInt(req.body.priority),
+            parseInt(req.body.type),
+            parseInt(req.body.status),
+            req.body.carouselId
+        ];
+    }
+
     db.query(sql, sqlParams, function (err, result) {
-        if (err)  
+        if (err)
             return res.send({ status: "3306", massage: err.message });
-        if (result.affectedRows) 
+        if (result.affectedRows)
             res.send({ status: "0", massage: "更改成功" });
-        else 
+        else
             res.send({ status: "0", massage: "更改失败" });
     })
 }
@@ -74,11 +91,11 @@ exports.batchDelete = (req, res) => {
         sql += mysql.format(modelsql, item) + ";";
     })
     db.query(sql, function (err, result) {
-        if (err) 
+        if (err)
             return res.send({ status: "3306", massage: err.message });
         if (result.affectedRows)
             res.send({ status: "0", massage: "删除成功" });
-        else 
+        else
             res.send({ status: "0", massage: "删除失败" });
     })
 }
@@ -95,11 +112,11 @@ exports.insertById = (req, res) => {
         req.body.status
     ];
     db.query(sql, sqlParams, function (err, result) {
-        if (err) 
+        if (err)
             return res.send({ status: "3306", massage: err.message });
-        if (result.affectedRows ) 
+        if (result.affectedRows)
             res.send({ status: "0", massage: "插入成功" });
-        else 
+        else
             res.send({ status: "0", massage: "插入失败" });
     })
 }
