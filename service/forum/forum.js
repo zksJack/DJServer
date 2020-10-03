@@ -76,3 +76,21 @@ exports.batchDelete = (req, res) => {
         }
     })
 }
+/*******************手机端************* */
+exports.insertForum=(req,res)=>{
+    let sql = 'INSERT INTO tb_forum(user_id,username,create_time,is_priv,content,type) VALUES(?,?,NOW(),0,?,?)';
+    let sqlParams = [
+        req.body.userId,
+        req.body.username,
+        req.body.content,
+        req.body.type,
+    ];
+    db.query(sql, sqlParams, function (err, result) {
+        if (err) return res.send({ status: "3306", massage: err.message });
+        if ( result.affectedRows ){
+            res.send({ status: "0", massage: "添加成功" });
+        }else{
+            res.send({ status: "1", massage: "添加失败" });
+        }
+    })
+}

@@ -7,3 +7,11 @@ exports.in_huifu_schema={
         comment:JoiUtils.IS_STRING_NOT_NULL
     }
 }
+exports.in_forum_schema={
+    body:{
+        userId:JoiUtils.IS_STRING_NOT_NULL,
+        username:JoiUtils.IS_STRING_NOT_NULL,
+        content:JoiUtils.IS_STRING_NOT_NULL,
+        type:JoiUtils.IS_INT_NOT_NULL,
+    }
+}

@@ -28,7 +28,7 @@ exports.getAllUserInfo = (req, res) => {
 }
 //
 exports.getUserInfo = (req, res) => {
-    let sql = "SELECT u.id,username,phone,nation,wx_num,qq_num,age,sex,total_score,education,job_rank,join_party_time,u.disabled,c.branch_name FROM tb_user u ,tb_coordinate c WHERE u.id = ? and u.branch_id = c.branch_id"
+    let sql = "SELECT u.*,FROM tb_user u WHERE u.id = ?"
     let sqlParams = [req.body.userID];
     console.log(sqlParams);
     db.query(sql, sqlParams, function (err, result) {
@@ -164,7 +164,7 @@ exports.userLogin = (req, res) => {
             if (bcryptjs.compareSync(req.body.password,result[0].password)) {
                 let user = {username:result[0].username}
                 let tokenStr = jsonwebtoken.sign(user,config.jwtSecretKey,{expiresIn:config.expiresIn});
-                return res.send({ status: "0", massage: "查询成功", token: tokenStr,data:result[0].id});
+                return res.send({ status: "0", massage: "查询成功", token: tokenStr,data:result[0]});
             } else {
                 return res.send({ status: "1", massage: "密码错误" });
             }
