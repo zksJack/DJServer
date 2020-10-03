@@ -14,3 +14,9 @@ exports.up_Accept_schema={
         reportId:JoiUtils.IS_STRING_NOT_NULL
     }
  }
+ exports.in_report_schema={
+    body:{
+        istype:JoiUtils.IS_INT_NOT_NULL,
+        userID:JoiUtils.IS_STRING_NOT_NULL,
+    }
+ }

@@ -11,5 +11,6 @@ module.exports={
     IS_QQ:Joi.string().regex(/[1-9][0-9]{4,}/).error(new Error('QQ格式不正确')),
     IS_birthday:Joi.string().regex(/^\d{4}-\d{1,2}-\d{1,2}/).error(new Error('生日格式不正确')),
     IS_chinese:Joi.string().regex(/^[\u4e00-\u9fa5]{0,}$/).error(new Error('汉字格式不正确')),
-    IS_Longth0_30:Joi.string().regex(/^.{3,20}$/).error(new Error('字符长度在3-20'))
+    IS_Longth0_30:Joi.string().regex(/^.{3,20}$/).error(new Error('字符长度在3-20')),
+    IS_HTML:Joi.string().regex(/^<([a-z]+)([^<]+)*(?:>(.*)<\/\1>|\s+\/>)$/).error(new Error('数据必须是html代码'))
 }
