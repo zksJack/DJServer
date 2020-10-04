@@ -59,11 +59,11 @@ exports.deleteNewsById = (req, res) => {
                 if (err) return res.send({ status: "3306", massage: err.message });
                 console.log(result);
                 if (result.affectedRows) {
-                    try {
-                        fs.unlinkSync(path.join(__dirname, '../..' + resulta[0].pic));
-                    } catch (error) {
-                        console.log("图片没有");
-                    }
+                    // try {
+                    //     fs.unlinkSync(path.join(__dirname, '../..' + resulta[0].pic));
+                    // } catch (error) {
+                    //     console.log("图片没有");
+                    // }
                     res.send({ status: "0", massage: "删除成功" });
                 }
                 else {
@@ -95,11 +95,11 @@ exports.updateNewsById = (req, res) => {
             if (err) return res.send({ status: "3306", massage: err.message });
             if (result.affectedRows){
                 //更新完成后删除问件
-                try {
-                   flg && fs.unlinkSync(path.join(__dirname, '../..' + resulta[0].pic));
-                } catch (error) {
-                    console.log("图片没有");
-                }
+                // try {
+                //    flg && fs.unlinkSync(path.join(__dirname, '../..' + resulta[0].pic));
+                // } catch (error) {
+                //     console.log("图片没有");
+                // }
                 res.send({ status: "0", massage: "更新成功" });
                 }
             else {
