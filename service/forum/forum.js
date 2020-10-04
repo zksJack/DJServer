@@ -7,7 +7,7 @@ exports.pageQueryList=(req,res)=>{
     (page <= 0) && (page = 1);
     let limit = req.body.limit * 1 || 10;
     let m = (page - 1) * limit;
-    let sql = 'SELECT SQL_CALC_FOUND_ROWS t.*, COUNT(c.user_id) as num FROM tb_forum t LEFT JOIN tb_forum_comment c ON t.forum_id = c.forum_id GROUP BY t.create_time limit ?,?';
+    let sql = 'SELECT SQL_CALC_FOUND_ROWS t.*, COUNT(c.user_id) as num FROM tb_forum t LEFT JOIN tb_forum_comment c ON t.forum_id = c.forum_id GROUP BY t.create_time limit ?,?';  //num 表示当前帖子的回复总数
     let sqlParams = [m, limit];
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
@@ -29,6 +29,10 @@ exports.findForumById=(req,res)=>{
     })
 }
 //根据id删除帖子
+/***
+ *  帖子删除的同时要把当前帖子的所有回复都删了
+ * 
+ */
 exports.deleteForumById=(req,res)=>{
     let sql = '';
     let sqlmodel = 'DELETE FROM  tb_forum WHERE forum_id = ?';
@@ -49,7 +53,7 @@ exports.deleteForumById=(req,res)=>{
 }
 //批量删除(根据id)
 exports.batchDelete = (req, res) => {
-    //数据库字段有几项必填项 条语句不适合
+    //数据库字段有几项必填项 一条语句不适合
     // let sql = "insert into tb_user(id,password) values ? on duplicate key update password = values(password)";
 
     let sqlParams = [];

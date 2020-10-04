@@ -116,7 +116,7 @@ exports.updateUserJifen = (req, res) => {
 	     ) as a
 		)
 	Where id = ?
-    `;
+    `;                                              // 先统计用户的总积分后 然后更新
     let sqlParams = [
         req.body.userId,req.body.userId,
     ];
@@ -130,6 +130,9 @@ exports.updateUserJifen = (req, res) => {
     })
 }
 //更新当前类型积分
+/**
+ * 跟新当前的积分  先保证有此种类型的持久化数据 （）
+ */
 exports.updateCurMax = (req, res) => {
     
     let sql1 = 'SELECT* FROM tb_integral WHERE user_id = ? and type = ?'

@@ -42,12 +42,6 @@ exports.updateStatus=(req,res)=>{
     })
 }
 
-//查询现在是否有正在进行的民主评议
-exports.selectIsCommenting =(req,res)=>{
-    let sql = '';
-    let sqlParams = [];
-}
-
 //修改信息根据ID
 exports.updateById=(req,res)=>{
     let sql = 'UPDATE tb_comment SET create_time = now(), content=?, title_desc =?,is_open = ? WHERE id = ?';

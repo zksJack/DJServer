@@ -46,7 +46,7 @@ exports.updateById = (req, res) => {
    // fs.unlinkSync(path.join(__dirname,'../../uploads/'+req.file.filename));
     let sql = '';
     let sqlParams = [];
-    if (req.file) {
+    if (req.file) {  //根据是否有文件判断是否要更新数据库储存的图片路径
         sql = 'update tb_carousel set title = ?,url = ?, img_url = ?, priority = ?,type = ?,status = ?,create_time = now() WHERE id = ?';
         sqlParams = [
             req.body.title,

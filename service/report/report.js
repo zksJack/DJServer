@@ -36,9 +36,10 @@ exports.updateAccept = (req, res) => {
     let sqlParams = [
             req.body.type, 
             req.body.reason, 
+            req.body.type==1?1:2,
             req.body.reportId,
-            req.body.type==1?1:2
         ];
+    console.log(sqlParams);
     db.query(sql, sqlParams, function (err, result) {
         if (err) return res.send({ status: "3306", massage: err.message });
         if (result.affectedRows) {
